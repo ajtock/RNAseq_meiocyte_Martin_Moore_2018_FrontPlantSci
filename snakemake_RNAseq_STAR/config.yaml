@@ -1,0 +1,37 @@
+SAMPLES: [
+          "WT_RNAseq_Rep1_ERR2402974"
+         # "WT_RNAseq_Rep2_ERR2402973",
+         # "WT_RNAseq_Rep3_ERR2402972",
+         # "ph1_RNAseq_Rep1_ERR2402970",
+         # "ph1_RNAseq_Rep2_ERR2402969",
+         # "ph1_RNAseq_Rep3_ERR2402968"
+         ]
+THREADS: 32
+MEMORY: "120g"
+FILTER:
+  fastqc:
+      contaminants: "contaminants/contaminants_list_fastqc.txt"
+  bbduk:
+      kmerSize: 18
+      rRNAfasta: "contaminants/ribokmers.fa.gz"
+  trimmomatic:
+      ILLUMINACLIP: "ILLUMINACLIP:contaminants/cat_all_and_TruSeq_Single_Indexes.fa:2:30:10:1:true"
+      HEADCROP: "HEADCROP:10"
+      LEADING: "LEADING:3"
+      TRAILING: "TRAILING:3"
+      SLIDINGWINDOW: "SLIDINGWINDOW:4:20"
+      MINLEN: "MINLEN:80"
+MAPPING:
+      reference: "data/index/wheat_v1.0"
+      alignments: 100 # STAR option --outFilterMultimapNmax
+      anchor: 100 # STAR option --winAnchorMultimapNmax
+      mismatches: 6 # STAR option --outFilterMismatchNmax
+      MAPQboth: 3
+      MAPQunique: 255
+      sortMemory: "4G"
+COVERAGE:
+      normalizeUsing: "BPM"
+      ignoreForNormalization: "chrUn" # Reference genome-specific parameter
+      binSize: 1
+      genomeBinSize: 10000
+      genomeBinName: "10kb"
